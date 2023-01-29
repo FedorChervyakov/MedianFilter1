@@ -38,17 +38,17 @@ THE SOFTWARE.
  **/
 class MedianFilter {
 public:
-	/** 
+  /** 
    * Inits the buffer to zero
    **/
-	template <unsigned nTaps> MedianFilter() :
-		buffer(new double[nTaps]()),
-		taps(nTaps) {
+  template <unsigned nTaps> MedianFilter() :
+    buffer(new double[nTaps]()),
+    taps(nTaps) {
     // TODO: is this required? or new double[]() above should be enough?
-		for(unsigned i=0;i<nTaps;i++) {
-			buffer[i] = 0;
-		}
-	}
+    for(unsigned i=0;i<nTaps;i++) {
+      buffer[i] = 0;
+    }
+  }
 
   /** 
    * Inits all coefficients and the buffer to zero
@@ -62,21 +62,21 @@ public:
    **/
   ~MedianFilter();
 
-	/**
+  /**
    * The actual filter function operation: it receives one sample
    * and returns one sample.
    * \param input The input sample.
    **/
-	inline double filter(double input) {
+  inline double filter(double input) {
     // NB: This is slow naive implementation
-		double *buf_val = buffer + offset;
-		
-		*buf_val = input;
+    double *buf_val = buffer + offset;
+    
+    *buf_val = input;
     double min = std::numeric_limits<double>::max();
     double max = -std::numeric_limits<double>::max();
-		
     
-		while(buf_val >= buffer) {
+    
+    while(buf_val >= buffer) {
       if (*buf_val < min)
         min = *buf_val;
       if (*buf_val > max)
@@ -84,41 +84,41 @@ public:
       buf_val--;
     }
 
-		buf_val = buffer + taps-1;
-		
-		while(buf_val > buffer + offset) {
+    buf_val = buffer + taps-1;
+    
+    while(buf_val > buffer + offset) {
       if (*buf_val < min)
         min = *buf_val;
       if (*buf_val > max)
         max = *buf_val;
       buf_val--;
     }
-		
-		if(++offset >= taps)
-			offset = 0;
+    
+    if(++offset >= taps)
+      offset = 0;
 
-		double output_ = (max-min) / 2;
+    double output_ = (max-min) / 2;
     if (max == min)
       output_ = min;
-		
-		return output_;
-	}
+    
+    return output_;
+  }
 
 
   /**
    * Resets the buffer (but not the coefficients)
    **/
-	void reset();
+  void reset();
 
   /**
    * Returns the number of taps.
    **/
-	unsigned getTaps() {return taps;};
+  unsigned getTaps() {return taps;};
 
 private:
-	double        *buffer;
-	unsigned      taps;
-	unsigned      offset = 0;
+  double        *buffer;
+  unsigned      taps;
+  unsigned      offset = 0;
 };
 
 #endif

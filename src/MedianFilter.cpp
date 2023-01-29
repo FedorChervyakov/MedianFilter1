@@ -25,7 +25,6 @@ THE SOFTWARE.
 /* (C) 2023 Fedor Chervyakov */
 
 #include "MedianFilter.h"
-
 #include <cstring>
 
 MedianFilter::MedianFilter(unsigned number_of_taps) :

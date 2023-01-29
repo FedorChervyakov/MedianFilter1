@@ -7,8 +7,6 @@ FetchContent_Declare(
   GIT_TAG        v1.13.0
 )
 FetchContent_MakeAvailable(googletest)
-#add_library(GTest::GTest INTERFACE IMPORTED)
-#target_link_libraries(GTest::GTest INTERFACE gtest_main)
 
 # Add test executables
 add_executable(median_filter_test test_median_filter.cpp)

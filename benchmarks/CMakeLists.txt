@@ -19,4 +19,4 @@ target_link_libraries(benchmark_median_filter
   MedianFilter
   )
 
-#add_test(median_filter_benchmark benchmark_median_filter)
+add_test(median_filter_benchmark benchmark_median_filter)

@@ -2,7 +2,7 @@
 #include <benchmark/benchmark.h>
 
 
-static void BM_Filter(benchmark::State& state) {
+static void BM_FilterOnes(benchmark::State& state) {
   // setup
   MedianFilter filter(state.range(0));
   double x = 1;
@@ -16,7 +16,27 @@ static void BM_Filter(benchmark::State& state) {
   }
 }
 
-BENCHMARK(BM_Filter)
+static void BM_FilterRandom(benchmark::State& state) {
+  // setup
+  MedianFilter filter(state.range(0));
+  double x = 1;
+  double y = 0;
+
+  for (auto _: state) {
+    x = std::rand();
+    // timed section
+    y = filter.filter(x);
+    benchmark::DoNotOptimize(y);
+
+  }
+}
+
+BENCHMARK(BM_FilterOnes)
+  ->Range(0, 1<<16)
+  ->Complexity(benchmark::oAuto);
+
+BENCHMARK(BM_FilterRandom)
+  ->RangeMultiplier(6)
   ->Range(0, 1<<16)
   ->Complexity(benchmark::oAuto);
 

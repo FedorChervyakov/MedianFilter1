@@ -7,9 +7,16 @@ TEST(MedianFilterTests, TestReset) {
   constexpr int N_TAPS = 20;
   MedianFilter filter(N_TAPS);
   filter.reset();
-  // TODO: check buffer (hint: Google Mock's For...)
-  // no way to check the buffer because it is private?
-  
+}
+
+TEST(MedianFilterTests, TestGetTaps) {
+  constexpr int N_TAPS = 20;
+  MedianFilter filter(N_TAPS);
+
+  constexpr int expected = N_TAPS;
+  unsigned int actual = filter.getTaps();
+
+  ASSERT_EQ(actual, expected);
 }
 
 TEST(MedianFilterTests, TestFilterOperation_Const) {

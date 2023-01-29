@@ -1,3 +1,5 @@
+set(BENCHMARK_ENABLE_TESTING OFF)
+
 # Fetch Google Benchmark
 include(FetchContent)
 

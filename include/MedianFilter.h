@@ -25,14 +25,17 @@ THE SOFTWARE.
 #ifndef MEDIAN_FILTER_H
 #define MEDIAN_FILTER_H
 
+#include <algorithm>
+#include <iterator>
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+#include <cstring>
 #include <limits>
 
 
 /**
- * Causal median filter. The precision is fixed-point.
+ * Causal median filter. The precision is double.
  * Computes median of last nTaps samples.
  * y(n) = med(x[n], x[n]-1, ... , x[n-nTaps])
  **/
@@ -43,10 +46,12 @@ public:
    **/
   template <unsigned nTaps> MedianFilter() :
     buffer(new double[nTaps]()),
+    temp(new double[nTaps]()),
     taps(nTaps) {
     // TODO: is this required? or new double[]() above should be enough?
     for(unsigned i=0;i<nTaps;i++) {
       buffer[i] = 0;
+      temp[i] = 0;
     }
   }
 
@@ -65,48 +70,32 @@ public:
   /**
    * The actual filter function operation: it receives one sample
    * and returns one sample.
+   * What is a median? a middle value in a sorted list
    * \param input The input sample.
    **/
   inline double filter(double input) {
-    // NB: This is slow naive implementation
     double *buf_val = buffer + offset;
-    
     *buf_val = input;
-    double min = std::numeric_limits<double>::max();
-    double max = -std::numeric_limits<double>::max();
-    
-    
-    while(buf_val >= buffer) {
-      if (*buf_val < min)
-        min = *buf_val;
-      if (*buf_val > max)
-        max = *buf_val;
-      buf_val--;
-    }
 
-    buf_val = buffer + taps-1;
-    
-    while(buf_val > buffer + offset) {
-      if (*buf_val < min)
-        min = *buf_val;
-      if (*buf_val > max)
-        max = *buf_val;
-      buf_val--;
-    }
-    
-    if(++offset >= taps)
+    memcpy(temp, buffer, sizeof(double) * taps);
+    std::sort(temp, temp+taps);
+
+    double output_ = 0;
+
+    if (taps % 2 == 0)
+      output_ = 0.5 * (*(temp+taps/2) + *(temp+taps/2-1));
+    else
+      output_ = *(temp+(taps-1)/2);
+
+    if (++offset >= taps)
       offset = 0;
 
-    double output_ = (max-min) / 2;
-    if (max == min)
-      output_ = min;
-    
     return output_;
   }
 
 
   /**
-   * Resets the buffer (but not the coefficients)
+   * Resets the buffer
    **/
   void reset();
 
@@ -117,6 +106,7 @@ public:
 
 private:
   double        *buffer;
+  double        *temp;
   unsigned      taps;
   unsigned      offset = 0;
 };

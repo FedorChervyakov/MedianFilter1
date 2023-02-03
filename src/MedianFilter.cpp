@@ -29,6 +29,7 @@ THE SOFTWARE.
 
 MedianFilter::MedianFilter(unsigned number_of_taps) :
   buffer(new double[number_of_taps]()),
+  temp(new double[number_of_taps]()),
   taps(number_of_taps)
 {
 }
@@ -37,10 +38,12 @@ MedianFilter::MedianFilter(unsigned number_of_taps) :
 MedianFilter::~MedianFilter()
 {
   delete[] buffer;
+  delete[] temp;
 }
 
 
 void MedianFilter::reset()
 {
   memset(buffer, 0, sizeof(double) * taps);
+  memset(temp, 0, sizeof(double) * taps);
 }

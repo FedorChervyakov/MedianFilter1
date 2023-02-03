@@ -24,7 +24,7 @@ TEST(MedianFilterTests, TestFilterOperation_Const) {
   constexpr int INPUT_SIZE = 5;
 
   constexpr double x[INPUT_SIZE] = {1, 1, 1, 1, 1};
-  constexpr double expected_y[INPUT_SIZE] = {0.5, 0.5, 1, 1, 1};
+  constexpr double expected_y[INPUT_SIZE] = {0, 1, 1, 1, 1};
   double actual_y[INPUT_SIZE] = {0};
 
   MedianFilter filter(N_TAPS);

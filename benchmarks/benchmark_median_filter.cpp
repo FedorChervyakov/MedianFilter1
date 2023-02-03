@@ -23,8 +23,8 @@ static void BM_FilterRandom(benchmark::State& state) {
   double y = 0;
 
   for (auto _: state) {
-    x = std::rand();
     // timed section
+    x = std::rand();
     y = filter.filter(x);
     benchmark::DoNotOptimize(y);
 
@@ -36,7 +36,6 @@ BENCHMARK(BM_FilterOnes)
   ->Complexity(benchmark::oAuto);
 
 BENCHMARK(BM_FilterRandom)
-  ->RangeMultiplier(6)
   ->Range(0, 1<<16)
   ->Complexity(benchmark::oAuto);
 

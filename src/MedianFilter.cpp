@@ -24,7 +24,7 @@ THE SOFTWARE.
 /* (C) 2018-2021 Bernd Porr */
 /* (C) 2023 Fedor Chervyakov */
 
-#include "MedianFilter.h"
+#include "MedianFilter1/MedianFilter.h"
 #include <cstring>
 
 MedianFilter::MedianFilter(unsigned number_of_taps) :
